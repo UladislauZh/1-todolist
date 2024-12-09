@@ -3,10 +3,12 @@ import { TaskType } from "./App";
 import { TodolistHeader } from "./TodolistHeader";
 import { AddForm } from "./AddForm";
 import { FilterButtons } from "./FilterButtons";
+import { Button } from "./Button";
 
 type TodolistPropsType = {
   title: string;
   tasks: TaskType[];
+  removeTask: (taskId: number) => void;
 };
 
 export const Todolist = (props: TodolistPropsType) => {
@@ -23,6 +25,10 @@ export const Todolist = (props: TodolistPropsType) => {
             <li>
               <input type="checkbox" checked={t.isDone} />
               <span>{t.title}</span>
+              <Button
+                title={"x"}
+                onClickHandler={() => props.removeTask(t.id)}
+              />
             </li>
           );
         })}
@@ -33,9 +39,7 @@ export const Todolist = (props: TodolistPropsType) => {
     <div className="todolist">
       <TodolistHeader title={props.title} />
       <AddForm />
-      {/* <ul> */}
       {tasksList}
-      {/* </ul> */}
       <FilterButtons />
     </div>
   );
