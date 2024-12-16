@@ -1,18 +1,23 @@
-import React from "react";
-import { TaskType } from "./App";
+import React, { useRef, useState } from "react";
+import { FilterValuesType, TaskType } from "./App";
 import { TodolistHeader } from "./TodolistHeader";
-import { AddForm } from "./AddForm";
+// import { AddForm } from "./AddForm";
 import { FilterButtons } from "./FilterButtons";
 import { Button } from "./Button";
 
 type TodolistPropsType = {
   title: string;
   tasks: TaskType[];
-  removeTask: (taskId: number) => void;
+  addTask: (title: string) => void;
+  removeTask: (taskId: string) => void;
+  changeTodolistFilter: (nextFilter: FilterValuesType) => void;
 };
 
 export const Todolist = (props: TodolistPropsType) => {
   // const {title, tasks} = props   Деструктуризация
+
+  // const taskInputRef = useRef<HTMLInputElement>(null);
+  const [taskTitle, setTaskTitle] = useState("");
 
   // условный рендеринг
   const tasksList =
@@ -23,7 +28,7 @@ export const Todolist = (props: TodolistPropsType) => {
         {props.tasks.map((t) => {
           return (
             <li>
-              <input type="checkbox" checked={t.isDone} />
+              <input type='checkbox' checked={t.isDone} />
               <span>{t.title}</span>
               <Button
                 title={"x"}
@@ -35,12 +40,39 @@ export const Todolist = (props: TodolistPropsType) => {
       </ul>
     );
 
+  const isAddTaskPossible = taskTitle.length <= 15;
+
+  const addTaskHandler = () => {
+    props.addTask(taskTitle);
+    setTaskTitle("");
+  };
+
   return (
-    <div className="todolist">
+    <div className='todolist'>
       <TodolistHeader title={props.title} />
-      <AddForm />
+      <div>
+        {/* <input ref={taskInputRef} /> */}
+        <input
+          value={taskTitle}
+          onChange={(e) => setTaskTitle(e.currentTarget.value)} //можно юзать onInput
+        />
+        <Button
+          title='+'
+          onClickHandler={
+            addTaskHandler
+            // if (taskInputRef.current) {
+            //   props.addTask(taskInputRef.current.value);
+            //   taskInputRef.current.value = "";
+            // }
+          }
+          isBtnDisabled={!taskTitle.length || !isAddTaskPossible}
+        />
+      </div>
+      {!isAddTaskPossible && <div>Task tittle is to long</div>}
+      {!taskTitle.length && <div>Enter task title(Max 15 chars)</div>}
+      {/* <AddForm /> */}
       {tasksList}
-      <FilterButtons />
+      <FilterButtons changeTodolistFilter={props.changeTodolistFilter} />
     </div>
   );
 };
