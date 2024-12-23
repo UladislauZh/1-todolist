@@ -15,16 +15,12 @@ export type TaskType = {
 };
 
 export type FilterValuesType = "all" | "active" | "completed";
-
-// console.log(v1());
-
 function App() {
   // BLL
   const todolistTitle = "What to learn";
-  // const todolistTitle_2 = "What to buy";
 
   const [tasks, setNextTasks] = useState<Array<TaskType>>([
-    { id: v1(), title: "HTML&CSS", isDone: true },
+    { id: v1(), title: "HTML&CSS", isDone: true }, //'done', 'notDone', 'paused'
     { id: v1(), title: "JS", isDone: true },
     { id: v1(), title: "React", isDone: false },
   ]);
@@ -32,8 +28,8 @@ function App() {
   const removeTask = (taskId: string) => {
     const nextState = tasks.filter((t) => t.id !== taskId);
     setNextTasks(nextState);
-    // console.log(tasks);
   };
+  //CRUD logic
   const addTask = (title: string) => {
     const newTask: TaskType = {
       // id: crypto.randomUUID()
@@ -41,7 +37,14 @@ function App() {
       title: title,
       isDone: false,
     };
+
     const nextState: Array<TaskType> = [newTask, ...tasks];
+    setNextTasks(nextState);
+  };
+  const changeTaskStatus = (taskId: string, newStatus: boolean) => {
+    const nextState: Array<TaskType> = tasks.map((t) =>
+      t.id === taskId ? { ...t, isDone: newStatus } : t
+    );
     setNextTasks(nextState);
   };
 
@@ -70,6 +73,7 @@ function App() {
         title={todolistTitle}
         tasks={filteredTasks}
         removeTask={removeTask}
+        changeTaskStatus={changeTaskStatus}
         addTask={addTask}
       />
       {/* Todolist({title : "What to learn"}), tasks: task_1 */}

@@ -15,13 +15,17 @@ export const FilterButtons = ({
 }: FilterButtonsPropsType) => {
   return (
     <div>
-      <Button title="All" onClickHandler={() => changeTodolistFilter("all")} />
       <Button
-        title="Active"
+        classes='filter-btn-active'
+        title='All'
+        onClickHandler={() => changeTodolistFilter("all")}
+      />
+      <Button
+        title='Active'
         onClickHandler={() => changeTodolistFilter("active")}
       />
       <Button
-        title="Completed"
+        title='Completed'
         onClickHandler={() => changeTodolistFilter("completed")}
       />
       {/* <button>All</button>

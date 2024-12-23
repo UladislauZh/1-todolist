@@ -8,9 +8,11 @@ import { Button } from "./Button";
 type TodolistPropsType = {
   title: string;
   tasks: TaskType[];
+  filter: FilterValuesType;
   addTask: (title: string) => void;
   removeTask: (taskId: string) => void;
   changeTodolistFilter: (nextFilter: FilterValuesType) => void;
+  changeTaskStatus: (taskId: string, newStatus: boolean) => void;
 };
 
 export const Todolist = (props: TodolistPropsType) => {
@@ -28,8 +30,14 @@ export const Todolist = (props: TodolistPropsType) => {
         {props.tasks.map((t) => {
           return (
             <li>
-              <input type='checkbox' checked={t.isDone} />
-              <span>{t.title}</span>
+              <input
+                type='checkbox'
+                checked={t.isDone}
+                onChange={(e) =>
+                  props.changeTaskStatus(t.id, e.currentTarget.checked)
+                }
+              />
+              <span className={t.isDone ? "task-done" : "task"}>{t.title}</span>
               <Button
                 title={"x"}
                 onClickHandler={() => props.removeTask(t.id)}
